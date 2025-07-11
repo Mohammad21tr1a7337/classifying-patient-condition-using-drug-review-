@@ -1,8 +1,4 @@
 streamlit
-ensamble
-numpy
-pandas 
-matplotlib
-seaborn
-sklearn
+scikit-learn
 nltk
+numpy
