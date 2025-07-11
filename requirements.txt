@@ -1,8 +1,8 @@
 streamlit
-pickle
 ensamble
 numpy
 pandas 
 matplotlib
 seaborn
 sklearn
+nltk
