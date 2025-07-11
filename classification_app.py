@@ -10,10 +10,16 @@ from nltk.stem import WordNetLemmatizer
 # ✅ Set Streamlit page config FIRST
 st.set_page_config(page_title="Medical Condition Predictor", layout="centered")
 
-# Download required NLTK resources
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# Download NLTK resources (optional if using Streamlit Cloud)
+try:
+    nltk.data.find("corpora/stopwords")
+except LookupError:
+    nltk.download("stopwords")
+
+try:
+    nltk.data.find("corpora/wordnet")
+except LookupError:
+    nltk.download("wordnet")
 
 # Load model and vectorizer
 with open("model.pkl", "rb") as f:
@@ -57,15 +63,15 @@ footer {
 </style>
 """, unsafe_allow_html=True)
 
-# Preprocessing function
+# Preprocessing function (punkt removed)
 def preprocess_review(text):
     text = html.unescape(text)
     text = text.lower()
-    text = re.sub(r'https?://\\S+|www\\.\\S+', '', text)
+    text = re.sub(r'https?://\S+|www\.\S+', '', text)
     text = re.sub(r'\n', '', text)
     text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
     text = re.sub(r"\d+", "", text)
-    words = nltk.word_tokenize(text)
+    words = text.split()  # ✅ Simpler tokenization to avoid punkt
     stop_words = set(stopwords.words("english"))
     lemmatizer = WordNetLemmatizer()
     words = [lemmatizer.lemmatize(word) for word in words if word not in stop_words]
